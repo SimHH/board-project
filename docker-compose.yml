@@ -1,0 +1,25 @@
+version: "3"
+services:
+  mongo:
+    image: mongo
+    container_name: board-mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - ./data:/data/db
+      
+  backend:
+    build: ./backend
+    container_name: board-backend
+    ports:
+      - "5000:5000"
+    depends_on:
+      - mongo
+
+  frontend:
+    build: ./frontend
+    container_name: board-frontend
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
