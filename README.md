@@ -1,9 +1,8 @@
 Node.js 게시판 웹 애플리케이션
 
-프로젝트 개요
+## 프로젝트 개요
 
 Express.js, React, MongoDB를 기반으로 한 게시판 웹 애플리케이션입니다.
-Git을 통한 협업 및 이력 관리를 목표로 하며, Docker 환경에서 실행됩니다.
 
 ## 기술 스택
 | 영역        | 기술 |
@@ -31,6 +30,6 @@ Git을 통한 협업 및 이력 관리를 목표로 하며, Docker 환경에서 
 - 댓글 작성 / 수정 / 삭제
 
 ## 실행 방법
-git clone https://github.com/SimHH/
+git clone https://github.com/SimHH/](https://github.com/SimHH/board-project.git
 cd board
 docker-compose up --build
