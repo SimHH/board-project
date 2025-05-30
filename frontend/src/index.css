@@ -207,17 +207,20 @@ input:focus {
   display: flex;
   justify-content: right;
   width: 800px;
+  cursor: pointer;
 }
 
 .edit-btn {
   border: transparent;
   background-color: orange;
   border-radius: 5px;
+  cursor: pointer;
 }
 .delete-btn {
   border: transparent;
   background-color: orange;
   border-radius: 5px;
+  cursor: pointer;
 }
 
 .comment-edit-btn {
