@@ -1,83 +1,105 @@
-const passport = require('passport');
-const GoogleStrategy = require('passport-google-oauth20').Strategy;
-const KakaoStrategy = require('passport-kakao').Strategy;
-const GithubStrategy = require('passport-github2').Strategy;
+const passport = require("passport");
+const GoogleStrategy = require("passport-google-oauth20").Strategy;
+const KakaoStrategy = require("passport-kakao").Strategy;
+const GitHubStrategy = require("passport-github2").Strategy;
 const User = require("../models/User");
-require("dotenv").config();
+const jwt = require("jsonwebtoken");
+const SECRET = process.env.JWT_SECRET;
 
+module.exports = () => {
+  passport.use(
+    new GoogleStrategy(
+      {
+        clientID: process.env.GOOGLE_CLIENT_ID,
+        clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+        callbackURL: "http://localhost:5000/auth/google/callback",
+      },
+      async (accessToken, refreshToken, profile, done) => {
+        try {
+          let user = await User.findOne({ email: profile.emails[0].value, provider: "google" });
+          if (!user) {
+            user = await new User({
+              username: profile.displayName,
+              email: profile.emails[0].value,
+              provider: "google",
+            }).save();
+          }
+  
+          const token = jwt.sign({ id: user._id }, SECRET, { expiresIn: "1h" });
+          return done(null, { user, token });
+        } catch (err) {
+          return done(err, null);
+        }
+      }
+    )
+  );
 
-passport.serializeUser((user, done) => {
-  done(null, user);
-});
+  passport.use(
+    new KakaoStrategy(
+      {
+        clientID: process.env.KAKAO_CLIENT_ID,
+        callbackURL: "http://localhost:5000/auth/kakao/callback"
+      },
+      async (accessToken, refreshToken, profile, done) => {
+        try {
+          const kakaoAccount = profile._json.kakao_account;
+          let email = kakaoAccount?.email || `kakao_${profile.id}@kakao.com`;
+          const username = (!profile.displayName || profile.displayName === "미연동 계정") ? `kakao_${profile.id}` : profile.displayName;
+          let user = await User.findOne({ email, provider: "kakao" });
+  
+          if (!user) {
+            user = await new User({
+              username,
+              email,
+              provider: "kakao"
+            }).save();
+          }
+          const token = jwt.sign({ id: user._id }, SECRET, { expiresIn: "1h" });
+  
+          return done(null, { user, token });
+        } catch (err) {
+          return done(err, null);
+        }
+      }
+    )
+  );
 
-passport.deserializeUser((user, done) => {
-  done(null, user);
-});
-
-
-passport.use(new GoogleStrategy({
-    clientID: process.env.GOOGLE_CLIENT_ID,  
-    clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-    callbackURL: '/auth/google/callback'
-  }, async (accessToken, refreshToken, profile, done) => {
-    console.log('Google profile:', profile);
+  passport.use(
+    new GitHubStrategy(
+      {
+        clientID: process.env.GITHUB_CLIENT_ID,
+        clientSecret: process.env.GITHUB_CLIENT_SECRET,
+        callbackURL: "http://localhost:5000/auth/git/callback",
+      },
+      async (accessToken, refreshToken, profile, done) => {
+        try {
+          const email =
+            profile.emails?.[0]?.value || `github_${profile.id}@github.com`;
   
-    let user = await User.findOne({ provider: 'google', providerId: profile.id });
+          const rawName = profile.username;
+          const username = (!rawName || rawName === "undefined")
+            ? `github_${profile.id}`
+            : rawName;
   
-    if (!user) {
-      user = await User.create({
-        provider: 'google',
-        providerId: profile.id,
-        username: profile.displayName,
-        email: profile.emails?.[0]?.value,
-        profileImage: profile.photos?.[0]?.value
-      });
-    }
-    return done(null, user);
-  }));
-
-  passport.use(new KakaoStrategy({
-    clientID: '카카오_REST_API_KEY',
-    callbackURL: '/auth/kakao/callback'
-  }, async (accessToken, refreshToken, profile, done) => {
-    console.log('Kakao profile:', profile);
+          let user = await User.findOne({ email, provider: "github" });
   
-    let user = await User.findOne({ provider: 'kakao', providerId: profile.id });
+          if (!user) {
+            user = await new User({
+              username,
+              email,
+              provider: "github",
+            }).save();
+          }
   
-    if (!user) {
-      user = await User.create({
-        provider: 'kakao',
-        providerId: profile.id,
-        username: profile.displayName,
-        email: profile._json.kakao_account?.email,
-        profileImage: profile._json.properties?.profile_image
-      });
-    }
+          const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+            expiresIn: "1h",
+          });
   
-    return done(null, user);
-  }));
-  
-
-  passport.use(new GithubStrategy({
-    clientID: '깃허브_CLIENT_ID',
-    clientSecret: '깃허브_CLIENT_SECRET',
-    callbackURL: '/auth/github/callback'
-  }, async (accessToken, refreshToken, profile, done) => {
-    console.log('Github profile:', profile);
-  
-    let user = await User.findOne({ provider: 'github', providerId: profile.id });
-  
-    if (!user) {
-      user = await User.create({
-        provider: 'github',
-        providerId: profile.id,
-        username: profile.username,
-        email: profile.emails?.[0]?.value,
-        profileImage: profile.photos?.[0]?.value
-      });
-    }
-  
-    return done(null, user);
-  }));
-
-module.exports = passport;
+          return done(null, { user, token });
+        } catch (err) {
+          return done(err, null);
+        }
+      }
+    )
+  );
+};

@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { write_board } from '../../api/post';
 import { jwtDecode } from 'jwt-decode';
-import axios from "axios";
 
 
 function WritePost() {
@@ -42,9 +41,8 @@ function WritePost() {
       const res = await write_board(formData);
 
       alert('글이 저장되었습니다!');
-      navigate('/list');
+      navigate('/');
     } catch (err) {
-      console.error('글 저장 오류:', err);
       alert('글 저장 실패');
     }
   };
@@ -52,24 +50,32 @@ function WritePost() {
   return (
     <div className="write-container">
       <h2>📝 글쓰기</h2>
-      <form onSubmit={handleSubmit}>
+      
+      <form className="write-submit-form" onSubmit={handleSubmit}>
+        <label className="title-label" htmlFor="title">제목</label>
         <input
+          id="title"
           type="text"
           placeholder="제목"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           required
+          className="title-input content-margin"
         />
-        <div className="write-container">
+        <label className="content-label" htmlFor="content">내용</label>
         <textarea
+          id="content"
           placeholder="내용을 입력하세요"
           value={content}
           onChange={(e) => setContent(e.target.value)}
           required
+          className="content-input content-margin"
         />
+        <div className="file-write-btn content-margin">
+          <input type = "file" onChange={handleFileChange} />
+          <button className="write-submit-btn" type="submit">등록</button>
         </div>
-        <input type = "file" onChange={handleFileChange} />
-        <button type="submit">등록</button>
+
       </form>
 
     </div>

@@ -1,4 +1,5 @@
 body {
+  background-color: white;
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
@@ -6,7 +7,7 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   width: 100%;
-  height: 100vh;
+  height: 90vh;
 }
 
 code {
@@ -21,6 +22,244 @@ input {
 input:focus {
   border: 1px solid blue;
 }
+
+/* 헤더 */
+.header-style {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 30px;
+  background-color: rgb(255, 255, 164);
+}
+
+.board-title {
+  cursor: pointer;
+  user-select: none;
+}
+
+/* 게시판 */
+
+.mother-board {
+  width: 100%;
+  height: 80vh;
+  background-color: none;
+  padding: 50px;
+  box-sizing: border-box;
+  position: relative;
+  background-color: white;
+}
+
+.board-table {
+  margin-top: 20px;
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+  border-spacing: 0 20px;
+}
+
+
+.board-container {
+  background: none;
+  display: flex;
+  flex-direction: column;
+}
+
+.login-header-button {
+  width: 70px;
+  height: 40px;
+  background-color: orange;
+  border-radius: 5px;
+  border: transparent;
+  padding: 10px;
+    cursor: pointer;
+}
+
+.write-button {
+  background-color: orange;
+  border-radius: 5px;
+  border: transparent;
+  padding: 10px;
+  position: absolute;
+  right: 50px;
+  bottom: 10px;
+  cursor: pointer;
+}
+
+.search-form {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.search-btn {
+   background-color: orange;
+   padding: 5px 10px;
+  border-radius: 5px;
+  border: none;
+  margin-left: 10px;
+  cursor: pointer;
+}
+
+.post-form {
+  height: 55px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.post-detail {
+  text-decoration: none;
+  color: black;
+  font-weight: bold;
+
+}
+
+.post {
+  border-bottom: black;
+  margin-top: 30px;
+}
+
+.post-tr {
+  height: 55px;
+  border-bottom: 1px solid rgb(202, 202, 202);
+}
+
+
+
+/* 글작성 */
+
+.write-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.write-submit-form {
+  width: 500px;
+}
+
+.title-input {
+  width: 100%;
+  height: 30px;
+  border: 1px solid gray;
+  border-radius: 5px;
+  outline: none;
+}
+
+
+.title-input:focus {
+  border: 2px solid black;
+}
+
+.content-input {
+  width: 100%;
+  height: 200px;
+  border-color: gray;
+  border-radius: 5px;
+}
+
+.file-input {
+  width: 100%;
+}
+
+.file-write-btn {
+  display:flex;
+
+  justify-content: space-between;
+}
+
+.author-form {
+  display: flex;
+  justify-content: right;
+  width: 800px;
+}
+
+.content-margin {
+  margin-bottom: 80px;
+}
+
+.title-label {
+  cursor: pointer;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.content-label {
+  cursor: pointer;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.write-submit-btn {
+  border: transparent;
+  background-color: orange;
+  border-radius: 5px;
+  cursor: pointer;
+
+}
+
+.content-margin-form {
+  margin-bottom: 200px;
+}
+
+/* 수정 & 삭제 */
+
+.edit-del-form {
+  display: flex;
+  justify-content: right;
+  width: 800px;
+}
+
+.edit-btn {
+  border: transparent;
+  background-color: orange;
+  border-radius: 5px;
+}
+.delete-btn {
+  border: transparent;
+  background-color: orange;
+  border-radius: 5px;
+}
+
+.comment-edit-btn {
+  border: transparent;
+  background-color: orange;
+  border-radius: 5px;
+  cursor: pointer
+}
+
+.comment-del-btn {
+  border: transparent;
+  background-color: orange;
+  border-radius: 5px;
+  cursor: pointer
+}
+
+/* 댓글 */
+
+.comment-form {
+  display: flex;
+  align-items: center;
+  
+}
+
+.comment-input {
+  height: 50px;
+  width: 700px
+}
+
+.comment-write-btn {
+  border: transparent;
+  background-color: orange;
+  border-radius: 5px;
+  cursor: pointer;
+  height: 50px;
+
+}
+
+
+
+
+/* 로그인 */
 
 .login-wrap{
   display: flex;
@@ -43,7 +282,7 @@ input:focus {
 }
 
 .login-button {
-  background: #ffd483;
+  background: orange;
   width: 100%;
   border-radius: 5px;
   cursor: pointer;
@@ -51,10 +290,7 @@ input:focus {
   padding: 10px;
   border: none;
   color: black;
-}
-
-.login-button:hover {
-  background: orange; 
+  font-weight: bold;
 }
 
 .login-footer {
@@ -63,15 +299,32 @@ input:focus {
   align-items: center;
 }
 
-.write-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+.register-button {
+  outline: none;
+  border: none;
+  background: orange;
+  border-radius: 5px;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+.login-button:hover,
+.login-header-button:hover,
+.search-btn:hover,
+.comment-edit-btn:hover,
+.comment-del-btn:hover,
+.comment-write-btn:hover,
+.write-button:hover,
+.write-submit-btn:hover,
+.register-btn:hover,
+.register-button:hover {
+  background: #ffd483;
 }
 
 .social-Login {
   display: flex;
   flex-direction: row;
+  align-items: center;
   justify-content: space-between;
 }
 
@@ -124,4 +377,47 @@ input:focus {
   z-index: 999;
 }
 
+/* 회원가입 */
 
+.register-form {
+  width: 500px;
+  display: flex;
+  flex-direction: column;
+}
+
+.register-container {
+  height: calc(100vh - 120px);
+  display: flex;
+  justify-content: center;
+  margin-top: 150px;
+}
+
+.register-btn {
+  margin-top: 50px;
+  height: 50px;
+  background-color: orange;
+  outline: none;
+  cursor: pointer;
+  border: none;
+  border-radius: 5px;
+}
+
+.register-label-style {
+  margin-top: 30px;
+  margin-bottom: 10px;
+}
+
+.register-input {
+  height: 50px;
+  border: none;
+  outline: none;
+  border-bottom: 2px solid gray;
+  border-radius: 5px;
+  padding: 0px 10px;
+}
+
+.register-input:focus {
+  outline: none;
+  border: none;
+  border-bottom: 2px solid black;
+}

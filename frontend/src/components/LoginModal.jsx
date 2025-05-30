@@ -1,25 +1,28 @@
-import { useState } from 'react';
-import { login } from '../api/auth';
+import { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { AuthContext } from "../context/AuthContext";
 
 function LoginModal({onClose}) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
 
+  const { login } = useContext(AuthContext);
+
+
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const res = await login({ username, password });
-      localStorage.setItem('token', res.data.token);
-      navigate('/list');
+      await login({ username, password });
+      navigate('/');
+      onClose();
     } catch (err) {
-      alert('아이디 또는 비밀번호를 확인해주세요.');
+      alert(err.response.data.error);
     }
   };
 
   const handleGoToRegister = () => {
-    navigate('/register');
+    navigate("/register");
   };
 
   return (
@@ -46,12 +49,13 @@ function LoginModal({onClose}) {
                 fontSize: "18px",
                 cursor: "pointer"
             }}>✕</button>
-    <div className="board-container" style={styles.container}>
+    <div style={styles.container}>
       <h2>로그인</h2>
       <form onSubmit={handleLogin} style={styles.form}>
         <div className='login-wrap'>
-        <label htmlFor="Id">Id</label>
+        <label htmlFor="Id">아이디</label>
         <input
+          id = "Id"
           type="text"
           placeholder="아이디"
           value={username}
@@ -60,7 +64,7 @@ function LoginModal({onClose}) {
         />
         </div>
         <div className='login-wrap'>
-        <label htmlFor='password'>Password</label>
+        <label htmlFor='password'>비밀번호</label>
         <input
           id='password'
           type="password"
@@ -70,11 +74,11 @@ function LoginModal({onClose}) {
           style={styles.input}
         />
         </div>
-        <button className='login-button' type="submit" style={styles.button}>로그인</button>
+        <button className="login-button" type="submit" >로그인</button>
       </form>
       <div className='login-footer' style={{ marginTop: '20px', marginBottom: "30px"}}>
         <span>계정이 없으신가요?</span>
-        <button onClick={() => {
+        <button className='register-button' onClick={() => {
             handleGoToRegister();
             onClose();
         }}>회원가입</button>

@@ -1,22 +1,27 @@
+require('dotenv').config({ path: '../.env' });
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
-
+const passport = require('passport');
 const postRoutes = require("./routes/post");
 const authRoutes = require("./routes/auth");
-
+const commentRoutes = require("./routes/comment");
+const path = require("path");
 const app = express();
 const PORT = 5000;
 
-// 미들웨어
+require('./config/passport')();
+
 app.use(cors());
 app.use(express.json());
-
-// 라우터
-app.use('/api/auth', authRoutes);
+app.use(passport.initialize());
+app.use('/api/user', authRoutes);
 app.use('/api/post', postRoutes);
+app.use("/api/comments", commentRoutes);
+app.use("/upload", express.static(path.join(__dirname, "upload")));
 
-// DB 연결 & 서버 실행
+app.use('/', require('./routes/auth'));
+
 mongoose.connect('mongodb://127.0.0.1:27017/board', {
   useNewUrlParser: true,
   useUnifiedTopology: true,
