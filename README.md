@@ -31,6 +31,6 @@ Git을 통한 협업 및 이력 관리를 목표로 하며, Docker 환경에서 
 - 댓글 작성 / 수정 / 삭제
 
 ## 실행 방법
-git clone https://github.com/yourname/your-repo.git
+git clone https://github.com/SimHH/
 cd your-repo
 docker-compose up --build
