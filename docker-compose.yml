@@ -1,4 +1,5 @@
-version: "3"
+version: "3.8"
+
 services:
   mongo:
     image: mongo
@@ -6,15 +7,20 @@ services:
     ports:
       - "27017:27017"
     volumes:
-      - ./data:/data/db
-      
+      - mongo-data:/data/db
+
   backend:
-    build: ./backend
+    build: 
+      context: ./backend
+      dockerfile: Dockerfile
     container_name: board-backend
     ports:
       - "5000:5000"
     depends_on:
       - mongo
+    environment:
+      - MONGO_URL=mongodb://mongo:27017/board
+    restart: always
 
   frontend:
     build: ./frontend
@@ -23,3 +29,7 @@ services:
       - "3000:3000"
     depends_on:
       - backend
+    restart: always
+
+volumes:
+  mongo-data:

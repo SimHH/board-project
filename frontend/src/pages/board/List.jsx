@@ -27,7 +27,7 @@ function List() {
       const res = await list_board(currentPage, POSTS_PER_PAGE, searchKeyword);
       setPosts(res.data.posts);
       setTotalPages(res.data.totalPages);
-      setTotalPosts(res.data.totalPosts); // ✅ totalPosts 받기
+      setTotalPosts(res.data.totalPosts);
     } catch (err) {
       console.error("글 목록 불러오기 실패:", err);
     }
