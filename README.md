@@ -49,5 +49,5 @@ Express.js, React, MongoDB를 기반으로 한 게시판 웹 애플리케이션�
 
 ## 실행 방법
 - git clone https://github.com/SimHH/board-project.git
-- cd board
+- cd board-project
 - docker-compose up --build
