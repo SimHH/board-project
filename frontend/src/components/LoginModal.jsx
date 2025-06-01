@@ -26,32 +26,12 @@ function LoginModal({onClose}) {
   };
 
   return (
-    <div style={{
-        position: 'fixed', top: 0, left: 0, width: '100%', height: '100%',
-        backgroundColor: 'rgba(0,0,0,0.5)', display: 'flex',
-        justifyContent: 'center', alignItems: 'center', zIndex: 999,
-    }}>
-        <div style={{
-            backgroundColor: '#fff',
-            padding: '30px 40px',
-            borderRadius: '12px',
-            boxShadow: '0 4px 20px rgba(0,0,0,0.2)',
-            width: '360px',
-            maxWidth: '90%',
-            position: 'relative'
-        }}>
-            <button onClick={onClose} style={{
-                position: "absolute",
-                top: "10px",
-                right: "10px",
-                background: "none",
-                border: "none",
-                fontSize: "18px",
-                cursor: "pointer"
-            }}>✕</button>
-    <div style={styles.container}>
-      <h2>로그인</h2>
-      <form onSubmit={handleLogin} style={styles.form}>
+    <div className="modal-overlay">
+        <div className="login-modal">
+            <button onClick={onClose} className="login-close-btn">✕</button>
+    <div className="login-container">
+      <h2 className="login-text">로그인</h2>
+      <form onSubmit={handleLogin} className="login-form">
         <div className='login-wrap'>
         <label htmlFor="Id">아이디</label>
         <input
@@ -60,7 +40,6 @@ function LoginModal({onClose}) {
           placeholder="아이디"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
-          style={styles.input}
         />
         </div>
         <div className='login-wrap'>
@@ -71,7 +50,6 @@ function LoginModal({onClose}) {
           placeholder="비밀번호"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          style={styles.input}
         />
         </div>
         <button className="login-button" type="submit" >로그인</button>
@@ -107,17 +85,5 @@ function LoginModal({onClose}) {
   );
 }
 
-const styles = {
-  container: {
-    margin: '100px auto',
-    width: '300px',
-    textAlign: 'center',
-  },
-  form: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '15px',
-  },
-};
 
 export default LoginModal;
