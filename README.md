@@ -43,7 +43,9 @@ Express.js, React, MongoDB를 기반으로 한 게시판 웹 애플리케이션�
 - GITHUB_CLIENT_ID=깃허브 클라이언트 ID
 - GITHUB_CLIENT_SECRET=깃허브 비밀키
 - JWT_SECRET=JWT 비밀키
-- MONGO_URL=mongodb://mongo:27017/board
+MONGO_URL_LOCAL=mongodb://localhost:27017/board
+MONGO_URL_DOCKER=mongodb://mongo:27017/board
+
 
 ---
 
