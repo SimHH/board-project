@@ -78,8 +78,8 @@ function EditPost() {
       {post.fileUrl && !file && (
         <div className="content-margin">
           <p>
-            기존 파일:{" "}
-            <a href={`/${post.fileUrl}`} target="_blank" rel="noopener noreferrer">
+            {`📁 `}
+            <a className="file-form" href={`/${post.fileUrl}`} target="_blank" rel="noopener noreferrer">
               {post.fileUrl.split("/").pop()}
             </a>
             <button
@@ -88,7 +88,7 @@ function EditPost() {
                 setPost({ ...post, fileUrl: null });
                 setFileDeleted(true);
               }}
-              style={{ marginLeft: "1rem", color: "red" }}
+              className="comment-del-btn edit-file"
             >
               삭제
             </button>
