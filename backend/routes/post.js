@@ -7,17 +7,28 @@ const authMiddleware = require("../middleware/authToken");
 const fs = require("fs");
 
 const storage = multer.diskStorage({
-  destination: (req, file, cb) => cb(null, "./upload/"),
-  filename : (req, file, cb) =>
+  destination: (req, file, cb) =>
+    cb(null, path.join(__dirname, "../upload")),
+  filename: (req, file, cb) =>
     cb(null, Date.now() + "-" + file.originalname),
-})
+});
 
-const upload = multer({ storage });
+const upload = multer({
+  storage,
+  limits: { fileSize: 10 * 1024 * 1024 },
+  fileFilter: (req, file, cb) => {
+    const allowed = ['txt', '.png', '.jpg', '.jpeg', '.pdf', '.zip', '.js'];
+    const ext = path.extname(file.originalname).toLowerCase();
+    if (allowed.includes(ext)) cb(null, true);
+    else cb(new Error("허용되지 않은 파일 형식입니다."));
+  }
+});
 
 router.post("/save_post", authMiddleware, upload.single("file"),
   async (req, res) => {
     const { title, content } = req.body;
-    const fileUrl = req.file ? `upload/${req.file.filename}` : null;
+    
+    const fileUrl = req.file ? req.file.filename : null;
 
     try {
       const newPost = new Post({
@@ -37,6 +48,7 @@ router.post("/save_post", authMiddleware, upload.single("file"),
 );
 
 
+
 router.get("/postDetail/:id", async (req, res) => {
   try {
     const post = await Post.findById(req.params.id).populate("author");
@@ -46,6 +58,22 @@ router.get("/postDetail/:id", async (req, res) => {
     res.status(500).json({ error : "게시글 조회 오류" })
   }
 })
+
+router.get("/secure-download/:filename", authMiddleware, (req, res) => {
+  const { filename } = req.params;
+  const filePath = path.join(__dirname, "..", "upload", filename);
+
+  if (!fs.existsSync(filePath)) {
+    return res.status(404).json({ error: "파일이 존재하지 않습니다." });
+  }
+
+  return res.download(filePath, filename, (err) => {
+    if (err) {
+      console.error("파일 다운로드 에러:", err);
+      return res.status(500).json({ error: "파일 다운로드 실패" });
+    }
+  });
+});
 
 router.put("/:id", authMiddleware, upload.single("file"), async (req, res) => {
   try {
@@ -63,15 +91,16 @@ router.put("/:id", authMiddleware, upload.single("file"), async (req, res) => {
 
     if (req.file) {
       if (post.fileUrl) {
-        const filePath = path.join(__dirname, "..", post.fileUrl);
-        fs.unlink(filePath, (err) => {
-          if (err) console.error("파일 삭제 실패:", err);
+        const oldFilePath = path.join(__dirname, "..", "upload", post.fileUrl);
+        fs.unlink(oldFilePath, (err) => {
+          if (err) console.error("기존 파일 삭제 실패:", err);
         });
       }
-      post.fileUrl = `/upload/${req.file.filename}`;
+      post.fileUrl = req.file.filename; 
     }
+
     if (req.body.deleteFile === "true" && post.fileUrl) {
-      const filePath = path.join(__dirname, "..", post.fileUrl);
+      const filePath = path.join(__dirname, "..", "upload", post.fileUrl);
       fs.unlink(filePath, (err) => {
         if (err) console.error("파일 삭제 실패:", err);
       });
@@ -81,10 +110,12 @@ router.put("/:id", authMiddleware, upload.single("file"), async (req, res) => {
     await post.save();
     res.json({ message: "게시글 수정 완료", post });
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "error" });
+    console.error("게시글 수정 중 에러:", err);
+    res.status(500).json({ error: "서버 에러" });
   }
 });
+
+
 
 router.delete("/:id", authMiddleware, async (req, res) => {
   try {

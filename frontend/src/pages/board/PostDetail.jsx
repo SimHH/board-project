@@ -1,7 +1,7 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState, useContext, useRef } from "react";
-import { getPost, deletePost } from "../../api/post";
-import { getComments, createComment, deleteComment, updateComment } from "../../api/comment";
+import { getPost, deletePost, downloadFile } from "../../api/post";
+import { getComments, createComment, deleteComment, updateComment, } from "../../api/comment";
 import { AuthContext } from "../../context/AuthContext";
 
 function PostDetail() {
@@ -49,6 +49,7 @@ function PostDetail() {
     }
   };
 
+
   const handleCommentSubmit = async () => {
     if (!newComment.trim()) return;
     try {
@@ -94,25 +95,34 @@ function PostDetail() {
 
 return (
   <div className="write-container">
-    <h2 className="content-margin">{post.title}</h2>
-    <p className="content-margin-form">{post.content}</p>
-    <p className="author-form">작성자: {post.author.username}</p>
+    <div>    
+      <h2 className="content-margin">{post.title}
+          <span className="create-time-form">
+      {new Date(post.createdAt).toLocaleString()}
+  </span>
+      </h2>
+      <p className="content-margin-form">{post.content}</p>
+        {post.fileUrl && (
+          <div className="content-margin">
+            <p>
+              📁{" "}
+                  <a
+              href={`http://localhost:5000/api/post/download/${post.fileUrl}`}
+              className="file-form"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+                {post.fileUrl.split("/").pop()}
+              
+                </a>
+            </p>
+          </div>
+        )}
+      <p className="author-form">작성자: {post.author.username}</p>
 
-    {post.fileUrl && (
-      <div className="content-margin">
-        <p>
-          첨부파일:{" "}
-          <a
-            href={`/${post.fileUrl}`}
-            download
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            {post.fileUrl.split("/").pop()}
-          </a>
-        </p>
-      </div>
-    )}
+    </div>
+
+
 
     {isAuthor && (
       <div className="edit-del-form">
@@ -122,11 +132,11 @@ return (
     )}
 
 
-    <div className="content-margin">
+    <div className="content-margin detail-form">
       <h3>💬 댓글</h3>
 
       {isLogin && (
-        <div className="content-margin comment-form">
+        <div className="comment comment-form">
           <textarea
             rows="3"
             className="comment-input"
@@ -136,7 +146,6 @@ return (
           />
           <button
             className="comment-write-btn"
-            style={{ marginTop: "0.5rem" }}
             onClick={handleCommentSubmit}
           >
             댓글 작성
@@ -146,27 +155,25 @@ return (
 
       <ul className="content-margin">
         {comments.map((comment) => (
-          <li key={comment._id} style={{ marginBottom: "1rem" }}>
-            <strong>{comment.author.username}</strong>:
+          <li className="comment-list-form" key={comment._id} style={{ marginBottom: "1rem" }}>
+            <strong>{comment.author.username}</strong>
             {editingId === comment._id ? (
               <>
                 <textarea
                   value={editContent}
                   onChange={(e) => setEditContent(e.target.value)}
                   rows="2"
-                  className="content-input"
-                  style={{ marginTop: "0.5rem" }}
+                  className="comment-edit-form"
                 />
-                <div style={{ marginTop: "0.5rem" }}>
-                  <button onClick={handleUpdateComment}>저장</button>
-                  <button onClick={() => setEditingId(null)} style={{ marginLeft: "0.5rem" }}>
+                <div style={{ marginTop: "0.5rem", marginBottom: "20px"}}>
+                  <button className="comment-edit-btn" onClick={handleUpdateComment}>저장</button>
+                  <button className="comment-edit-btn"  onClick={() => setEditingId(null)} style={{ marginLeft: "0.5rem" }}>
                     취소
                   </button>
                 </div>
               </>
             ) : (
               <>
-                {" "}{comment.content}
                 {isLogin && String(user?._id) === String(comment.author._id) && (
                   <>
                     <button
@@ -183,12 +190,13 @@ return (
                     <button
                     className="comment-del-btn"
                       onClick={() => handleDeleteComment(comment._id)}
-                      style={{ marginLeft: "0.5rem", color: "red" }}
+                      style={{ marginLeft: "0.5rem", color: "black" }}
                     >
                       삭제
                     </button>
                   </>
                 )}
+                <p>{comment.content}</p>
               </>
             )}
           </li>

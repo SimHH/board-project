@@ -81,9 +81,10 @@ input:focus {
   padding: 10px;
   position: absolute;
   right: 50px;
-  bottom: 10px;
+  bottom: 0px;
   cursor: pointer;
 }
+
 
 .search-form {
   display: flex;
@@ -110,7 +111,6 @@ input:focus {
   text-decoration: none;
   color: black;
   font-weight: bold;
-
 }
 
 .post {
@@ -121,6 +121,14 @@ input:focus {
 .post-tr {
   height: 55px;
   border-bottom: 1px solid rgb(202, 202, 202);
+}
+
+.create-time-form {
+  display: flex;
+  justify-content: right;
+  font-weight: bold;
+  font-size: 15px;
+  color: gray;
 }
 
 
@@ -174,7 +182,11 @@ input:focus {
 }
 
 .content-margin {
-  margin-bottom: 80px;
+  margin-bottom: 20px;
+}
+
+.comment {
+  margin-bottom: 30px;
 }
 
 .title-label {
@@ -194,11 +206,20 @@ input:focus {
   background-color: orange;
   border-radius: 5px;
   cursor: pointer;
-
 }
 
 .content-margin-form {
   margin-bottom: 200px;
+}
+
+.file-form {
+  color: black;
+  font-weight: bold;
+}
+
+.detail-form {
+  border-top: 1px solid rgb(219, 219, 219) ;
+  margin-top: 30px;
 }
 
 /* 수정 & 삭제 */
@@ -208,14 +229,10 @@ input:focus {
   justify-content: right;
   width: 800px;
   cursor: pointer;
+  gap: 10px;
 }
 
-.edit-btn {
-  border: transparent;
-  background-color: orange;
-  border-radius: 5px;
-  cursor: pointer;
-}
+.edit-btn,
 .delete-btn {
   border: transparent;
   background-color: orange;
@@ -223,13 +240,7 @@ input:focus {
   cursor: pointer;
 }
 
-.comment-edit-btn {
-  border: transparent;
-  background-color: orange;
-  border-radius: 5px;
-  cursor: pointer
-}
-
+.comment-edit-btn,
 .comment-del-btn {
   border: transparent;
   background-color: orange;
@@ -237,17 +248,25 @@ input:focus {
   cursor: pointer
 }
 
+.edit-file{
+  margin-left: 10px;
+}
+
+
 /* 댓글 */
 
 .comment-form {
   display: flex;
   align-items: center;
-  
+  gap: 20px;
+
 }
 
 .comment-input {
   height: 50px;
-  width: 700px
+  width: 720px;
+  padding: 10px;
+  box-sizing: border-box;
 }
 
 .comment-write-btn {
@@ -259,7 +278,34 @@ input:focus {
 
 }
 
+.comment-edit-form {
+  display: flex;
+  height: 60px;
+  width: 100%;
+  margin-top: 10px;
+}
 
+.comment-list-form {
+  margin-top: 30px;
+  border-bottom: 1px solid rgb(202, 202, 202);
+}
+
+.comment-list-form:last-child {
+  border: none;
+}
+
+ul {
+  padding: 0;
+}
+
+li {
+  list-style-type: none;
+  list-style: none;
+}
+
+textarea {
+  resize: none;
+}
 
 
 /* 로그인 */

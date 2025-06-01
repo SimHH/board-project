@@ -7,6 +7,7 @@ const postRoutes = require("./routes/post");
 const authRoutes = require("./routes/auth");
 const commentRoutes = require("./routes/comment");
 const path = require("path");
+const secureDownloadRoutes = require("./routes/post");
 
 const app = express();
 const PORT = 5000;
@@ -18,14 +19,18 @@ app.use(express.json());
 app.use(passport.initialize());
 app.use('/api/user', authRoutes);
 app.use('/api/post', postRoutes);
-app.use("/api/comments", commentRoutes);
-app.use("/upload", express.static(path.join(__dirname, "upload")));
-
+app.use('/api/comments', commentRoutes);
 app.use('/', require('./routes/auth'));
 
-const MONGO_URL = process.env.MONGO_URL;
+let mongoURL = process.env.MONGO_URL;
 
-mongoose.connect(MONGO_URL)
+if (process.env.NODE_ENV === 'docker') {
+  console.log("docker!!!!!!!!!!!!!");
+} else {
+  console.log("local!!!!!!!!!!!!!!");
+}
+
+mongoose.connect(mongoURL)
   .then(() => {
     console.log('✅ MongoDB 연결 성공');
     app.listen(PORT, () => {

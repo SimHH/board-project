@@ -32,4 +32,10 @@ export const deletePost = (postId) =>
     }
   });
 
-  
+export const secureDownload = (filename) =>
+  API.get(`/secure-download/${filename}`, {
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("token")}`,
+    },
+    responseType: 'blob',
+  });
