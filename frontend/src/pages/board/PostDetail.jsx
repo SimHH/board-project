@@ -1,8 +1,9 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState, useContext, useRef } from "react";
-import { getPost, deletePost, downloadFile } from "../../api/post";
+import { getPost, deletePost, secureDownload } from "../../api/post";
 import { getComments, createComment, deleteComment, updateComment, } from "../../api/comment";
 import { AuthContext } from "../../context/AuthContext";
+import { handleFileDownload } from "../../utils/download";
 
 function PostDetail() {
   const { id } = useParams();
@@ -93,6 +94,7 @@ function PostDetail() {
     }
   };
 
+
 return (
   <div className="write-container">
     <div>    
@@ -103,26 +105,17 @@ return (
       </h2>
       <p className="content-margin-form">{post.content}</p>
         {post.fileUrl && (
-          <div className="content-margin">
             <p>
               📁{" "}
-                  <a
-              href={`http://localhost:5000/api/post/download/${post.fileUrl}`}
-              className="file-form"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-                {post.fileUrl.split("/").pop()}
-              
-                </a>
+              <button onClick={() => handleFileDownload(post.fileUrl)} className="file-form">
+                {post.fileUrl.split("-").slice(1).join("-")}
+            </button>
             </p>
-          </div>
+
         )}
       <p className="author-form">작성자: {post.author.username}</p>
 
     </div>
-
-
 
     {isAuthor && (
       <div className="edit-del-form">

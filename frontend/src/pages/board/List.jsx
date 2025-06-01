@@ -49,6 +49,7 @@ function List() {
           }}
         >
           <input
+            className="search-box"
             type="text"
             placeholder="제목 검색"
             value={searchKeyword}
@@ -111,7 +112,7 @@ function List() {
         </div>
 
         <div className="board-button-area">
-          <button className="write-button" onClick={handleWriteClick}>
+          <button className="write-button write-btn" onClick={handleWriteClick}>
             글쓰기
           </button>
         </div>

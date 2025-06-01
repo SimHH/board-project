@@ -17,7 +17,7 @@ const upload = multer({
   storage,
   limits: { fileSize: 10 * 1024 * 1024 },
   fileFilter: (req, file, cb) => {
-    const allowed = ['txt', '.png', '.jpg', '.jpeg', '.pdf', '.zip', '.js'];
+    const allowed = ['.txt', '.png', '.jpg', '.jpeg', '.pdf', '.zip', '.js'];
     const ext = path.extname(file.originalname).toLowerCase();
     if (allowed.includes(ext)) cb(null, true);
     else cb(new Error("허용되지 않은 파일 형식입니다."));
@@ -26,10 +26,9 @@ const upload = multer({
 
 router.post("/save_post", authMiddleware, upload.single("file"),
   async (req, res) => {
-    const { title, content } = req.body;
-    
-    const fileUrl = req.file ? req.file.filename : null;
 
+    const { title, content } = req.body;
+    const fileUrl = req.file ? req.file.filename : null;
     try {
       const newPost = new Post({
         title,
@@ -52,7 +51,6 @@ router.post("/save_post", authMiddleware, upload.single("file"),
 router.get("/postDetail/:id", async (req, res) => {
   try {
     const post = await Post.findById(req.params.id).populate("author");
-    console.log(post.author._id);
     res.json(post);
   } catch (err) {
     res.status(500).json({ error : "게시글 조회 오류" })

@@ -89,6 +89,16 @@ input:focus {
 .search-form {
   display: flex;
   justify-content: flex-end;
+  
+}
+
+.search-box {
+  border: 1px solid gray;
+}
+
+.search-box:focus {
+  border: 2px solid black;
+
 }
 
 .search-btn {
@@ -215,6 +225,11 @@ input:focus {
 .file-form {
   color: black;
   font-weight: bold;
+  border: transparent;
+  background-color: white;
+  cursor: pointer;
+  font-size: 15px;
+  text-decoration: underline;
 }
 
 .detail-form {

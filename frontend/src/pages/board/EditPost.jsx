@@ -1,6 +1,7 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { getPost, updatePost } from "../../api/post"; 
+import { getPost, updatePost } from "../../api/post";
+import { handleFileDownload } from "../../utils/download";
 
 function EditPost() {
   const { id } = useParams();
@@ -36,7 +37,7 @@ function EditPost() {
       if (fileDeleted) {
         formData.append("deleteFile", "true");
       }
-  
+
       await updatePost(id, formData);
       alert("게시글이 수정되었습니다.");
       navigate("/");
@@ -45,64 +46,67 @@ function EditPost() {
       alert("error");
     }
   };
-  
 
   if (!post) return <div>잠시만요...</div>;
 
   return (
-  <div className="write-container">
-    <h2>📝 글 수정</h2>
+    <div className="write-container">
+      <h2>📝 글 수정</h2>
 
-    <form className="write-submit-form" onSubmit={handleSubmit}>
-      <label className="title-label" htmlFor="title">제목</label>
-      <input
-        id="title"
-        type="text"
-        placeholder="제목"
-        value={title}
-        onChange={e => setTitle(e.target.value)}
-        required
-        className="title-input content-margin"
-      />
+      <form className="write-submit-form" onSubmit={handleSubmit}>
+        <label className="title-label" htmlFor="title">제목</label>
+        <input
+          id="title"
+          type="text"
+          placeholder="제목"
+          value={title}
+          onChange={e => setTitle(e.target.value)}
+          required
+          className="title-input content-margin"
+        />
 
-      <label className="content-label" htmlFor="content">내용</label>
-      <textarea
-        id="content"
-        placeholder="내용을 입력하세요"
-        value={content}
-        onChange={e => setContent(e.target.value)}
-        required
-        className="content-input content-margin"
-      />
+        <label className="content-label" htmlFor="content">내용</label>
+        <textarea
+          id="content"
+          placeholder="내용을 입력하세요"
+          value={content}
+          onChange={e => setContent(e.target.value)}
+          required
+          className="content-input content-margin"
+        />
 
-      {post.fileUrl && !file && (
-        <div className="content-margin">
-          <p>
-            {`📁 `}
-            <a className="file-form" href={`/${post.fileUrl}`} target="_blank" rel="noopener noreferrer">
-              {post.fileUrl.split("/").pop()}
-            </a>
-            <button
-              type="button"
-              onClick={() => {
-                setPost({ ...post, fileUrl: null });
-                setFileDeleted(true);
-              }}
-              className="comment-del-btn edit-file"
-            >
-              삭제
-            </button>
-          </p>
+        {post.fileUrl && !file && (
+          <div className="content-margin">
+            <p>
+              📁{" "}
+              <button
+                type="button"
+                className="file-form"
+                onClick={() => handleFileDownload(post.fileUrl)}
+              >
+                {post.fileUrl.split("-").slice(1).join("-")}
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setPost({ ...post, fileUrl: null });
+                  setFileDeleted(true);
+                }}
+                className="comment-del-btn edit-file"
+              >
+                삭제
+              </button>
+            </p>
+          </div>
+        )}
+
+        <div className="file-write-btn content-margin">
+          <input type="file" onChange={(e) => setFile(e.target.files[0])} />
+          <button className="write-submit-btn" type="submit">수정 완료</button>
         </div>
-      )}
-
-      <div className="file-write-btn content-margin">
-        <input type="file" onChange={(e) => setFile(e.target.files[0])} />
-        <button className="write-submit-btn" type="submit">수정 완료</button>
-      </div>
-    </form>
-  </div>
-);
+      </form>
+    </div>
+  );
 }
 
 export default EditPost;
