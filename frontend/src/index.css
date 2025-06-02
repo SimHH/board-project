@@ -70,8 +70,10 @@ input:focus {
   background-color: orange;
   border-radius: 5px;
   border: transparent;
+  font-weight: bold;
+  font-size: 15px;
   padding: 10px;
-    cursor: pointer;
+  cursor: pointer;
 }
 
 .write-button {
